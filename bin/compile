@@ -87,25 +87,14 @@ export CPPPATH="$INCLUDE_PATH"
 function set_env_var() {
   ENV_VAR_NAME=$1
   ENV_VAR_VALUE=$2
-  echo -n "$ENV_VAR_NAME" > $ENV_DIR/$ENV_VAR_VALUE
+  echo -n "$ENV_VAR_VALUE" > $ENV_DIR/$ENV_VAR_NAME
+  echo "$ENV_VAR_NAME = $ENV_VAR_VALUE" | indent
 }
 
-function prefix_to_env_var() {
-  ENV_VAR_NAME=$1
-  ENV_VAR_VALUE=$2
-  if [ -x $3/$ENV_VAR_NAME ]; then
-    PREVIOUS=":$(cat $ENV_DIR/$ENV_VAR_NAME)"
-  else
-    PREVIOUS=""
-  fi
-  set_env_var $ENV_VAR_NAME "${ENV_VAR_VALUE}${PREVIOUS}"
-}
-
-prefix_to_env_var "PATH" "$BUILD_DIR/.apt/usr/bin"
-prefix_to_env_var "LD_LIBRARY_PATH" "$BUILD_DIR/.apt/usr/lib"
-prefix_to_env_var "LIBRARY_PATH" "$BUILD_DIR/.apt/usr/lib"
-prefix_to_env_var "INCLUDE_PATH" "$BUILD_DIR/.apt/usr/include"
-
+topic "Exporting environmental variables"
+set_env_var "PATH" "$PATH"
+set_env_var "LD_LIBRARY_PATH" "$LD_LIBRARY_PATH"
+set_env_var "LIBRARY_PATH" "$LIBRARY_PATH"
+set_env_var "INCLUDE_PATH" "$INCLUDE_PATH"
 set_env_var "CPATH" "$CPATH"
 set_env_var "CPPPATH" "$CPPPATH"
-#set_env_var "BUNDLE_BUILD__CHARLOCK_HOLMES" "--with-icu-dir=\"$BUILD_DIR/.apt/usr\""
